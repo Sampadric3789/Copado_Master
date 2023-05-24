@@ -171,6 +171,24 @@ if (!process.env.COMPAT) {
             expect(ce.getAttribute('tabindex')).toBe(propValue);
         });
 
+        it('should work with supported aria properties', async () => {
+            const elm = createElement('x-with-camel-case-property', { is: XWithCamelCaseProperty });
+            expect(ce.ariaReadOnly).toBe('fffalse');
+            expect(ce.tigerLion).toBe('ceDefault');
+
+            document.body.appendChild(elm);
+            const ce = elm.shadowRoot.querySelector('ce-with-camel-case-property');
+
+            expect(ce.ariaReadOnly).toBe('false');
+            expect(ce.tigerLion).toBe('lwcDefault');
+            elm.aro = 'true';
+            elm.tigerLion = 'eugene kashida';
+            await Promise.resolve();
+
+            expect(ce.ariaReadOnly).toBe('true');
+            expect(ce.tigerLion).toBe('eugene kashida');
+        });
+
         describe('when custom element not upgraded', () => {
             let elm;
 
